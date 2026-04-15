@@ -217,13 +217,14 @@ export async function getEscrowData(escrowId: string): Promise<EscrowData | null
     const words = result.slice(2).match(/.{64}/g) ?? [];
     return {
       escrowId,
-      orderId: "", // Would need string decoding
+      orderId: "",
       buyer: decodeAddress(words[1]),
       token: decodeAddress(words[2]),
       amount: decodeUint256(words[3]),
       deadline: Number(decodeUint256(words[4])),
       status: Number(decodeUint256(words[5])) as EscrowStatus,
       funded: decodeUint256(words[6]) > BigInt(0),
+      deliveredAt: words.length > 7 ? Number(decodeUint256(words[7])) : 0,
     };
   } catch {
     return null;

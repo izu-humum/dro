@@ -48,6 +48,7 @@ export enum EscrowStatus {
   Released = 2,
   Refunded = 3,
   Disputed = 4,
+  Delivered = 5,
 }
 
 export interface EscrowData {
@@ -59,4 +60,5 @@ export interface EscrowData {
   deadline: number;
   status: EscrowStatus;
   funded: boolean;
+  deliveredAt: number;
 }

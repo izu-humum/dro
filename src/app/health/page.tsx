@@ -77,7 +77,7 @@ export default function HealthPage() {
       <main className="relative z-10 pt-12 pb-16 px-6 max-w-3xl mx-auto">
         {/* Header */}
         <div className="flex items-center justify-between mb-10">
-          <Link href="/dashboard" className="flex items-center gap-2 text-[13px] font-mono text-white/30 hover:text-white transition-colors">
+          <Link href="/dashboard" className="flex items-center gap-2 text-[13px] font-mono text-white/45 hover:text-white transition-colors">
             <ArrowLeft className="w-4 h-4" /> Dashboard
           </Link>
           <button
@@ -96,7 +96,7 @@ export default function HealthPage() {
             <Activity className="w-5 h-5 text-accent" />
             <h1 className="text-[22px] font-sans font-medium text-white">System Health</h1>
           </div>
-          <p className="text-[12px] font-mono text-white/30">
+          <p className="text-[12px] font-mono text-white/45">
             End-to-end health monitoring across the full user journey
           </p>
         </div>
@@ -105,7 +105,7 @@ export default function HealthPage() {
         {loading && !data && (
           <div className="text-center py-20">
             <Loader2 className="w-8 h-8 text-accent animate-spin mx-auto mb-4" />
-            <p className="text-[13px] font-mono text-white/30">Running 14 health checks...</p>
+            <p className="text-[13px] font-mono text-white/45">Running 14 health checks...</p>
           </div>
         )}
 
@@ -128,7 +128,7 @@ export default function HealthPage() {
               </p>
             )}
             {data.timestamp && (
-              <p className="text-[10px] font-mono text-white/20 mt-2">
+              <p className="text-[10px] font-mono text-white/50 mt-2">
                 Last checked: {new Date(data.timestamp).toLocaleTimeString()}
               </p>
             )}
@@ -157,7 +157,7 @@ export default function HealthPage() {
                       <span className="text-[13px] font-mono text-white/70">{result.name}</span>
                     </div>
                     <div className="flex items-center gap-3">
-                      <span className="text-[11px] font-mono text-white/25 flex items-center gap-1">
+                      <span className="text-[11px] font-mono text-white/40 flex items-center gap-1">
                         <Clock className="w-3 h-3" /> {result.responseTime}ms
                       </span>
                       {result.statusCode && (
@@ -189,7 +189,7 @@ export default function HealthPage() {
                           </div>
                         )}
                         {result.details && (
-                          <p className="text-[10px] font-mono text-white/20 break-all">{result.details}</p>
+                          <p className="text-[10px] font-mono text-white/50 break-all">{result.details}</p>
                         )}
                       </motion.div>
                     )}
@@ -202,7 +202,7 @@ export default function HealthPage() {
 
         {/* Footer */}
         <div className="mt-10 text-center">
-          <div className="flex items-center justify-center gap-2 text-[11px] font-mono text-white/15">
+          <div className="flex items-center justify-center gap-2 text-[11px] font-mono text-white/50">
             <Shield className="w-3 h-3" />
             Powered by DRO Health Monitor Agent (A2A)
           </div>

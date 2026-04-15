@@ -236,7 +236,7 @@ function CheckoutContent() {
 
       <main className="relative z-10 pt-28 pb-16 px-6 max-w-xl mx-auto">
         {/* Back */}
-        <motion.button {...fadeUp} onClick={() => router.back()} className="flex items-center gap-2 text-[13px] font-mono text-white/30 hover:text-white transition-colors duration-300 mb-10">
+        <motion.button {...fadeUp} onClick={() => router.back()} className="flex items-center gap-2 text-[13px] font-mono text-white/45 hover:text-white transition-colors duration-300 mb-10">
           <ArrowLeft className="w-4 h-4" /> Back
         </motion.button>
 
@@ -253,8 +253,8 @@ function CheckoutContent() {
             </div>
             <div>
               <h2 className="text-[15px] font-sans font-medium text-white">{name}</h2>
-              <p className="text-[12px] font-mono text-white/30 mt-1">{source}</p>
-              {float && <p className="text-[12px] font-mono text-white/30 mt-1 flex items-center gap-1"><Zap className="w-3 h-3 text-accent" />Float: {float}</p>}
+              <p className="text-[12px] font-mono text-white/45 mt-1">{source}</p>
+              {float && <p className="text-[12px] font-mono text-white/45 mt-1 flex items-center gap-1"><Zap className="w-3 h-3 text-accent" />Float: {float}</p>}
             </div>
           </div>
 
@@ -274,10 +274,10 @@ function CheckoutContent() {
         <motion.div {...fadeUp} transition={{ ...fadeUp.transition, delay: 0.2 }} className="glass p-6 rounded-2xl mb-6">
           <p className="label-text mb-4 tracking-[0.1em]">PAY WITH</p>
           <div className="grid grid-cols-2 gap-3 mb-6">
-            <button onClick={() => setPayMethod("fiat")} className={`flex items-center justify-center gap-2 py-4 rounded-xl border transition-all duration-300 text-[13px] font-mono ${payMethod === "fiat" ? "border-accent/40 bg-accent/10 text-accent shadow-[0_4px_30px_rgba(206,202,251,0.1)]" : "border-white/8 text-white/30 hover:border-white/15"}`}>
+            <button onClick={() => setPayMethod("fiat")} className={`flex items-center justify-center gap-2 py-4 rounded-xl border transition-all duration-300 text-[13px] font-mono ${payMethod === "fiat" ? "border-accent/40 bg-accent/10 text-accent shadow-[0_4px_30px_rgba(206,202,251,0.1)]" : "border-white/8 text-white/45 hover:border-white/15"}`}>
               <CreditCard className="w-4 h-4" /> Card / Bank
             </button>
-            <button onClick={() => setPayMethod("crypto")} className={`flex items-center justify-center gap-2 py-4 rounded-xl border transition-all duration-300 text-[13px] font-mono ${payMethod === "crypto" ? "border-accent/40 bg-accent/10 text-accent shadow-[0_4px_30px_rgba(206,202,251,0.1)]" : "border-white/8 text-white/30 hover:border-white/15"}`}>
+            <button onClick={() => setPayMethod("crypto")} className={`flex items-center justify-center gap-2 py-4 rounded-xl border transition-all duration-300 text-[13px] font-mono ${payMethod === "crypto" ? "border-accent/40 bg-accent/10 text-accent shadow-[0_4px_30px_rgba(206,202,251,0.1)]" : "border-white/8 text-white/45 hover:border-white/15"}`}>
               <Wallet className="w-4 h-4" /> Wallet
             </button>
           </div>
@@ -291,7 +291,7 @@ function CheckoutContent() {
                   value={cardNumber}
                   onChange={(e) => setCardNumber(e.target.value)}
                   placeholder="4242 4242 4242 4242"
-                  className="w-full bg-white/3 border border-white/6 rounded-xl px-4 py-3 text-[13px] font-mono text-white placeholder:text-white/15 focus:outline-none focus:border-accent/30 transition-colors duration-300"
+                  className="w-full bg-white/3 border border-white/6 rounded-xl px-4 py-3 text-[13px] font-mono text-white placeholder:text-white/30 focus:outline-none focus:border-accent/30 transition-colors duration-300"
                 />
               </div>
               <div className="grid grid-cols-2 gap-4">
@@ -302,7 +302,7 @@ function CheckoutContent() {
                     value={cardExpiry}
                     onChange={(e) => setCardExpiry(e.target.value)}
                     placeholder="MM/YY"
-                    className="w-full bg-white/3 border border-white/6 rounded-xl px-4 py-3 text-[13px] font-mono text-white placeholder:text-white/15 focus:outline-none focus:border-accent/30 transition-colors duration-300"
+                    className="w-full bg-white/3 border border-white/6 rounded-xl px-4 py-3 text-[13px] font-mono text-white placeholder:text-white/30 focus:outline-none focus:border-accent/30 transition-colors duration-300"
                   />
                 </div>
                 <div>
@@ -312,7 +312,7 @@ function CheckoutContent() {
                     value={cardCvv}
                     onChange={(e) => setCardCvv(e.target.value)}
                     placeholder="123"
-                    className="w-full bg-white/3 border border-white/6 rounded-xl px-4 py-3 text-[13px] font-mono text-white placeholder:text-white/15 focus:outline-none focus:border-accent/30 transition-colors duration-300"
+                    className="w-full bg-white/3 border border-white/6 rounded-xl px-4 py-3 text-[13px] font-mono text-white placeholder:text-white/30 focus:outline-none focus:border-accent/30 transition-colors duration-300"
                   />
                 </div>
               </div>
@@ -344,7 +344,7 @@ function CheckoutContent() {
                           <p className={`text-[13px] font-mono font-medium ${isSelected ? "text-accent" : "text-white/50"}`}>
                             {token}
                           </p>
-                          <p className="text-[10px] font-mono text-white/25">
+                          <p className="text-[10px] font-mono text-white/40">
                             {balVal > 0 ? `${balVal.toFixed(2)} available` : "0.00"}
                           </p>
                         </div>
@@ -361,7 +361,7 @@ function CheckoutContent() {
                     <img src="/tokens/celo.svg" alt="Celo" className="w-8 h-8" />
                     <div className="flex-1">
                       <p className="text-[13px] font-mono text-white">{wallet.shortAddress}</p>
-                      <p className="text-[11px] font-mono text-white/30">
+                      <p className="text-[11px] font-mono text-white/45">
                         Celo · {wallet.balance ?? "0"} CELO
                       </p>
                     </div>
@@ -370,7 +370,7 @@ function CheckoutContent() {
                     </span>
                   </div>
                   <div className="flex items-center justify-between mt-3 pt-3 border-t border-white/5">
-                    <p className="text-[11px] font-mono text-white/30">
+                    <p className="text-[11px] font-mono text-white/45">
                       Paying <span className="text-white/60">${total.toFixed(2)}</span> in <span className="text-white/60">{payToken}</span>
                     </p>
                     {!hasEnough && tokenBal >= 0 && (
@@ -387,7 +387,7 @@ function CheckoutContent() {
               ) : (
                 <div className="text-center py-6">
                   <Wallet className="w-8 h-8 text-accent mx-auto mb-4" />
-                  <p className="text-[13px] font-mono text-white/30 mb-4">Connect your wallet to pay with {payToken}</p>
+                  <p className="text-[13px] font-mono text-white/45 mb-4">Connect your wallet to pay with {payToken}</p>
                   <button
                     onClick={wallet.openModal}
                     className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-cyan-500/20 to-purple-500/20 border border-accent/25 text-[13px] font-mono text-accent hover:border-accent/40 transition-all duration-300"
@@ -411,9 +411,9 @@ function CheckoutContent() {
                 value={steamTradeUrl}
                 onChange={(e) => setSteamTradeUrl(e.target.value)}
                 placeholder="https://steamcommunity.com/tradeoffer/new/?partner=..."
-                className="w-full bg-white/3 border border-white/6 rounded-xl px-4 py-3 text-[13px] font-mono text-white placeholder:text-white/15 focus:outline-none focus:border-accent/30 transition-colors duration-300"
+                className="w-full bg-white/3 border border-white/6 rounded-xl px-4 py-3 text-[13px] font-mono text-white placeholder:text-white/30 focus:outline-none focus:border-accent/30 transition-colors duration-300"
               />
-              <p className="text-[11px] text-white/15 mt-2 font-mono">Item sent via Steam trade offer.</p>
+              <p className="text-[11px] text-white/50 mt-2 font-mono">Item sent via Steam trade offer.</p>
             </div>
           ) : isDigital ? (
             <div>
@@ -423,9 +423,9 @@ function CheckoutContent() {
                 value={deliveryEmail}
                 onChange={(e) => setDeliveryEmail(e.target.value)}
                 placeholder="you@email.com"
-                className="w-full bg-white/3 border border-white/6 rounded-xl px-4 py-3 text-[13px] font-mono text-white placeholder:text-white/15 focus:outline-none focus:border-accent/30 transition-colors duration-300"
+                className="w-full bg-white/3 border border-white/6 rounded-xl px-4 py-3 text-[13px] font-mono text-white placeholder:text-white/30 focus:outline-none focus:border-accent/30 transition-colors duration-300"
               />
-              <p className="text-[11px] text-white/15 mt-2 font-mono">Digital key or download link will be sent to this email.</p>
+              <p className="text-[11px] text-white/50 mt-2 font-mono">Digital key or download link will be sent to this email.</p>
             </div>
           ) : (
             <div className="space-y-4">
@@ -434,7 +434,7 @@ function CheckoutContent() {
                 value={address.street}
                 onChange={(e) => setAddress((a) => ({ ...a, street: e.target.value }))}
                 placeholder="Street address"
-                className="w-full bg-white/3 border border-white/6 rounded-xl px-4 py-3 text-[13px] font-mono text-white placeholder:text-white/15 focus:outline-none focus:border-accent/30 transition-colors duration-300"
+                className="w-full bg-white/3 border border-white/6 rounded-xl px-4 py-3 text-[13px] font-mono text-white placeholder:text-white/30 focus:outline-none focus:border-accent/30 transition-colors duration-300"
               />
               <div className="grid grid-cols-3 gap-3">
                 <input
@@ -442,21 +442,21 @@ function CheckoutContent() {
                   value={address.city}
                   onChange={(e) => setAddress((a) => ({ ...a, city: e.target.value }))}
                   placeholder="City"
-                  className="w-full bg-white/3 border border-white/6 rounded-xl px-4 py-3 text-[13px] font-mono text-white placeholder:text-white/15 focus:outline-none focus:border-accent/30 transition-colors duration-300"
+                  className="w-full bg-white/3 border border-white/6 rounded-xl px-4 py-3 text-[13px] font-mono text-white placeholder:text-white/30 focus:outline-none focus:border-accent/30 transition-colors duration-300"
                 />
                 <input
                   type="text"
                   value={address.state}
                   onChange={(e) => setAddress((a) => ({ ...a, state: e.target.value }))}
                   placeholder="State"
-                  className="w-full bg-white/3 border border-white/6 rounded-xl px-4 py-3 text-[13px] font-mono text-white placeholder:text-white/15 focus:outline-none focus:border-accent/30 transition-colors duration-300"
+                  className="w-full bg-white/3 border border-white/6 rounded-xl px-4 py-3 text-[13px] font-mono text-white placeholder:text-white/30 focus:outline-none focus:border-accent/30 transition-colors duration-300"
                 />
                 <input
                   type="text"
                   value={address.zip}
                   onChange={(e) => setAddress((a) => ({ ...a, zip: e.target.value }))}
                   placeholder="ZIP"
-                  className="w-full bg-white/3 border border-white/6 rounded-xl px-4 py-3 text-[13px] font-mono text-white placeholder:text-white/15 focus:outline-none focus:border-accent/30 transition-colors duration-300"
+                  className="w-full bg-white/3 border border-white/6 rounded-xl px-4 py-3 text-[13px] font-mono text-white placeholder:text-white/30 focus:outline-none focus:border-accent/30 transition-colors duration-300"
                 />
               </div>
             </div>
@@ -470,7 +470,7 @@ function CheckoutContent() {
             <div className="flex items-center gap-3"><Lock className="w-4 h-4 text-neon-green/60" /><span className="text-[13px] font-mono text-white/50">Payment held in smart contract escrow</span></div>
             <div className="flex items-center gap-3"><CheckCircle2 className="w-4 h-4 text-neon-green/60" /><span className="text-[13px] font-mono text-white/50">Released only on delivery confirmation</span></div>
             <div className="flex items-center gap-3"><Clock className="w-4 h-4 text-neon-green/60" /><span className="text-[13px] font-mono text-white/50">Auto-refund if undelivered in 14 days</span></div>
-            <div className="flex items-center gap-2 pt-2 text-[11px] text-white/20 font-mono"><FileText className="w-3 h-3" />Contract deployed on purchase</div>
+            <div className="flex items-center gap-2 pt-2 text-[11px] text-white/50 font-mono"><FileText className="w-3 h-3" />Contract deployed on purchase</div>
           </div>
         </motion.div>
 
@@ -498,11 +498,11 @@ function CheckoutContent() {
                 const isActive = step.key === txStep;
                 return (
                   <div key={step.key} className="flex items-center gap-3">
-                    <div className={`w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold ${isDone ? "bg-neon-green/20 text-neon-green" : isActive ? "bg-accent/20 text-accent animate-pulse" : "bg-white/5 text-white/20"}`}>
+                    <div className={`w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold ${isDone ? "bg-neon-green/20 text-neon-green" : isActive ? "bg-accent/20 text-accent animate-pulse" : "bg-white/5 text-white/50"}`}>
                       {isDone ? <CheckCircle2 className="w-3.5 h-3.5" /> : i + 1}
                     </div>
                     <div className="flex-1">
-                      <span className={`text-[12px] font-mono ${isDone ? "text-neon-green/70" : isActive ? "text-accent" : "text-white/25"}`}>{step.label}</span>
+                      <span className={`text-[12px] font-mono ${isDone ? "text-neon-green/70" : isActive ? "text-accent" : "text-white/40"}`}>{step.label}</span>
                       {step.hash && (
                         <a
                           href={`https://sepolia.celoscan.io/tx/${step.hash}`}
@@ -546,7 +546,7 @@ function CheckoutContent() {
                   return (
                     <div key={i} className="flex items-center gap-2 text-[11px] font-mono">
                       <span className="text-accent/60">{event.agent}</span>
-                      <span className="text-white/20">→</span>
+                      <span className="text-white/50">→</span>
                       <span className="text-white/40">{typeof label === "string" ? label : event.type}</span>
                     </div>
                   );
@@ -593,7 +593,7 @@ function CheckoutContent() {
               )}
             </span>
           </button>
-          <p className="text-center text-[11px] text-white/15 mt-4 font-mono">
+          <p className="text-center text-[11px] text-white/50 mt-4 font-mono">
             {payMethod === "crypto" && wallet.connected
               ? `Paying ${payToken} from ${wallet.shortAddress} on Celo`
               : "Powered by Dro Protocol"}
@@ -606,7 +606,7 @@ function CheckoutContent() {
 
 export default function CheckoutPage() {
   return (
-    <Suspense fallback={<div className="min-h-screen flex items-center justify-center"><div className="text-white/20 font-mono text-[13px]">Loading...</div></div>}>
+    <Suspense fallback={<div className="min-h-screen flex items-center justify-center"><div className="text-white/50 font-mono text-[13px]">Loading...</div></div>}>
       <CheckoutContent />
     </Suspense>
   );

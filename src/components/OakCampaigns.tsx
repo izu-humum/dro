@@ -67,7 +67,7 @@ function FundingBar({ goal, funded }: { goal: number; funded: number }) {
   const percent = goal > 0 ? Math.min((funded / goal) * 100, 100) : 100;
   return (
     <div className="w-full">
-      <div className="flex items-center justify-between text-[10px] font-mono text-white/40 mb-1">
+      <div className="flex items-center justify-between text-[10px] font-mono text-white/60 mb-1">
         <span>${funded.toFixed(2)} raised</span>
         {goal > 0 && <span>of ${goal.toFixed(2)}</span>}
       </div>
@@ -284,7 +284,7 @@ function PledgeModal({
           {!pledging && (
             <button
               onClick={onClose}
-              className="w-8 h-8 rounded-lg flex items-center justify-center text-white/50 hover:text-white/80 hover:bg-white/10 transition-all"
+              className="w-8 h-8 rounded-lg flex items-center justify-center text-white/70 hover:text-white hover:bg-white/10 transition-all"
             >
               <X className="w-4 h-4" />
             </button>
@@ -383,13 +383,13 @@ function PledgeModal({
                           <p className="text-[13px] font-sans text-white/90 truncate">{reward.name}</p>
                           <span className="text-[13px] font-mono text-accent font-medium flex-shrink-0">${reward.price}</span>
                         </div>
-                        <p className="text-[11px] font-mono text-white/50 mt-0.5 line-clamp-2">{reward.description}</p>
+                        <p className="text-[11px] font-mono text-white/70 mt-0.5 line-clamp-2">{reward.description}</p>
                         <div className="flex items-center gap-3 mt-1.5">
-                          <span className="text-[10px] font-mono text-white/35">
+                          <span className="text-[10px] font-mono text-white/70">
                             {reward.shippingType === "digital" ? "Digital delivery" : reward.shippingType}
                           </span>
                           {reward.estimatedDelivery && (
-                            <span className="text-[10px] font-mono text-white/35">
+                            <span className="text-[10px] font-mono text-white/70">
                               Est. {new Date(reward.estimatedDelivery).toLocaleDateString("en-US", { month: "short", year: "numeric" })}
                             </span>
                           )}
@@ -448,12 +448,12 @@ function PledgeModal({
           <div className="mt-4 glass rounded-xl p-3 max-h-48 overflow-y-auto">
             <div className="flex items-center gap-2 mb-2">
               <Loader2 className="w-3 h-3 animate-spin text-accent/60" />
-              <p className="text-[11px] font-mono text-white/50">
+              <p className="text-[11px] font-mono text-white/70">
                 Live Progress
               </p>
             </div>
             {logs.length === 0 ? (
-              <div className="flex items-center gap-2 text-[11px] font-mono text-white/30">
+              <div className="flex items-center gap-2 text-[11px] font-mono text-white/45">
                 <span className="inline-block w-1.5 h-1.5 rounded-full bg-accent/40 animate-pulse" />
                 Connecting to automation...
               </div>
@@ -608,7 +608,7 @@ function SuccessToast({
           </div>
           <button
             onClick={onDismiss}
-            className="w-7 h-7 rounded-lg flex items-center justify-center text-white/20 hover:text-white/50 hover:bg-white/5 transition-all flex-shrink-0"
+            className="w-7 h-7 rounded-lg flex items-center justify-center text-white/70 hover:text-white hover:bg-white/8 transition-all flex-shrink-0"
           >
             <X className="w-3.5 h-3.5" />
           </button>
@@ -717,13 +717,13 @@ export default function OakCampaigns() {
             href="https://app-dev.oaknetwork.org/"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-[11px] font-mono text-white/30 hover:text-accent/60 transition-colors flex items-center gap-1"
+            className="text-[11px] font-mono text-white/60 hover:text-accent transition-colors flex items-center gap-1"
           >
             View all <ExternalLink className="w-3 h-3" />
           </a>
         </div>
 
-        <p className="text-[12px] font-mono text-white/35 mb-4">
+        <p className="text-[12px] font-mono text-white/70 mb-4">
           You might also be interested in these live campaigns on Oak Network
         </p>
 
@@ -765,7 +765,7 @@ export default function OakCampaigns() {
                     <StatusBadge status={campaign.status} />
                   </div>
                   <div className="absolute top-2 right-2">
-                    <span className="px-1.5 py-0.5 rounded text-[9px] font-mono bg-black/50 text-white/50 backdrop-blur-sm">
+                    <span className="px-1.5 py-0.5 rounded text-[9px] font-mono bg-black/50 text-white/70 backdrop-blur-sm">
                       {campaign.category}
                     </span>
                   </div>
@@ -779,11 +779,11 @@ export default function OakCampaigns() {
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  <h4 className="text-[13px] font-sans font-medium text-white/90 mb-0.5 truncate group-hover:text-accent transition-colors">
+                  <h4 className="text-[13px] font-sans font-medium text-white mb-0.5 truncate group-hover:text-accent transition-colors">
                     {campaign.title}
                   </h4>
                 </a>
-                <p className="text-[11px] font-mono text-white/35 mb-3 truncate">
+                <p className="text-[11px] font-mono text-white/70 mb-3 truncate">
                   {campaign.subtitle}
                 </p>
 
@@ -793,20 +793,20 @@ export default function OakCampaigns() {
                 />
 
                 <div className="flex items-center justify-between mt-3">
-                  <div className="flex items-center gap-1 text-[10px] font-mono text-white/30">
+                  <div className="flex items-center gap-1 text-[10px] font-mono text-white/60">
                     <Clock className="w-3 h-3" />
                     {campaign.status === "LAUNCHED"
                       ? daysLeft(campaign.endDate)
                       : timeAgo(campaign.endDate)}
                   </div>
                   {campaign.pledgeCount && (
-                    <div className="flex items-center gap-1 text-[10px] font-mono text-white/30">
+                    <div className="flex items-center gap-1 text-[10px] font-mono text-white/60">
                       <Users className="w-3 h-3" />
                       {campaign.pledgeCount} backers
                     </div>
                   )}
                   {campaign.fiatEnabled && (
-                    <span className="text-[9px] font-mono text-neon-green/40 px-1.5 py-0.5 rounded bg-neon-green/5 border border-neon-green/10">
+                    <span className="text-[9px] font-mono text-neon-green/70 px-1.5 py-0.5 rounded bg-neon-green/8 border border-neon-green/15">
                       Fiat OK
                     </span>
                   )}

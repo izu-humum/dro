@@ -80,10 +80,10 @@ export default function DashboardPage() {
         <motion.div {...fadeUp} className="flex items-center justify-between mb-10">
           <div>
             <h1 className="text-[22px] font-sans font-medium text-white">Welcome back</h1>
-            <p className="text-[13px] font-mono text-white/30 mt-1">Your Dro dashboard</p>
+            <p className="text-[13px] font-mono text-white/50 mt-1">Your Dro dashboard</p>
           </div>
           <div className="flex items-center gap-2">
-            <button onClick={() => setPaymentMode("fiat")} className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-[11px] font-mono transition-all duration-300 ${paymentMode === "fiat" ? "bg-accent/10 text-accent border border-accent/20" : "glass text-white/30"}`}>
+            <button onClick={() => setPaymentMode("fiat")} className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-[11px] font-mono transition-all duration-300 ${paymentMode === "fiat" ? "bg-accent/10 text-accent border border-accent/20" : "glass text-white/50"}`}>
               <CreditCard className="w-3 h-3" /> Fiat
             </button>
             <button
@@ -94,7 +94,7 @@ export default function DashboardPage() {
                   wallet.openModal();
                 }
               }}
-              className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-[11px] font-mono transition-all duration-300 ${paymentMode === "crypto" ? "bg-accent/10 text-accent border border-accent/20" : "glass text-white/30"}`}
+              className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-[11px] font-mono transition-all duration-300 ${paymentMode === "crypto" ? "bg-accent/10 text-accent border border-accent/20" : "glass text-white/50"}`}
             >
               <Wallet className="w-3 h-3" /> {wallet.connected ? wallet.shortAddress : "Connect"}
             </button>
@@ -113,7 +113,7 @@ export default function DashboardPage() {
               onChange={(e) => setSearchQuery(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && handleSearch()}
               placeholder='Search anything — "AWP Asiimov" · "Logitech MX Master"'
-              className="flex-1 bg-transparent py-3 text-[13px] text-white placeholder:text-white/20 focus:outline-none font-mono"
+              className="flex-1 bg-transparent py-3 text-[13px] text-white placeholder:text-white/35 focus:outline-none font-mono"
             />
             <button
               onClick={handleSearch}
@@ -130,7 +130,7 @@ export default function DashboardPage() {
             <motion.div key={stat.label} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 + i * 0.05, duration: 0.6, ease: [0.16, 1, 0.3, 1] }} className="glass p-5 rounded-2xl text-center">
               <div className="inline-flex items-center justify-center w-10 h-10 rounded-xl bg-accent/8 text-accent mb-3">{stat.icon}</div>
               <div className="text-[20px] font-bold font-mono accent-value text-glow">{stat.value}</div>
-              <div className="text-[11px] font-mono text-white/25 mt-1">{stat.label}</div>
+              <div className="text-[11px] font-mono text-white/60 mt-1">{stat.label}</div>
             </motion.div>
           ))}
         </motion.div>
@@ -153,16 +153,16 @@ export default function DashboardPage() {
                           {order.image ? (
                             <img src={`/api/img?url=${encodeURIComponent(order.image)}`} alt={order.item} className="w-full h-full object-cover" onError={(e) => { e.currentTarget.style.display = "none"; e.currentTarget.nextElementSibling?.classList.remove("hidden"); }} />
                           ) : null}
-                          <span className={`text-[12px] font-bold text-white/8 ${order.image ? "hidden" : ""}`}>{order.source.charAt(0)}</span>
+                          <span className={`text-[12px] font-bold text-white/30 ${order.image ? "hidden" : ""}`}>{order.source.charAt(0)}</span>
                         </div>
                         <div>
                           <div className="flex items-center gap-2">
-                            <span className="text-[11px] font-mono text-white/15">#{order.id.split("-").pop()}</span>
-                            <span className="text-[13px] font-sans text-white">{order.item}</span>
+                            <span className="text-[11px] font-mono text-white/70">#{order.id.split("-").pop()}</span>
+                            <span className="text-[14px] font-sans font-medium text-white">{order.item}</span>
                           </div>
                           <div className="flex items-center gap-3 mt-1">
-                            <span className="text-[11px] font-mono text-white/20">{order.source}</span>
-                            <span className="text-[11px] font-mono text-white/25">${order.price.toFixed(2)}</span>
+                            <span className="text-[11px] font-mono text-white/60">{order.source}</span>
+                            <span className="text-[12px] font-mono text-white/70">${order.price.toFixed(2)}</span>
                           </div>
                         </div>
                       </div>
@@ -170,7 +170,7 @@ export default function DashboardPage() {
                         <span className={`flex items-center gap-1.5 text-[11px] font-mono px-2.5 py-1 rounded-lg ${config.color}`}>
                           {config.icon} {config.label}
                         </span>
-                        <ChevronRight className="w-4 h-4 text-white/10" />
+                        <ChevronRight className="w-4 h-4 text-white/40" />
                       </div>
                     </div>
                   </div>
@@ -184,29 +184,29 @@ export default function DashboardPage() {
         <motion.div {...fadeUp} transition={{ ...fadeUp.transition, delay: 0.4 }}>
           <div className="flex items-center justify-between mb-4">
             <p className="label-text tracking-[0.1em]">PAST ORDERS</p>
-            <span className="text-[11px] font-mono text-white/15">{pastOrders.length} completed</span>
+            <span className="text-[11px] font-mono text-white/60">{pastOrders.length} completed</span>
           </div>
           <div className="glass rounded-2xl overflow-hidden">
             <div className="divide-y divide-white/5">
               {pastOrders.map((order, i) => (
                 <motion.div key={order.id} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.45 + i * 0.04, duration: 0.5 }} className="flex items-center justify-between px-5 py-4 hover:bg-glass-hover transition-colors duration-300 cursor-pointer">
                   <div className="flex items-center gap-4">
-                    <div className="w-10 h-10 rounded-lg bg-white/3 flex items-center justify-center text-[10px] font-bold text-white/8 overflow-hidden flex-shrink-0">
+                    <div className="w-10 h-10 rounded-lg bg-white/5 flex items-center justify-center text-[10px] font-bold text-white/30 overflow-hidden flex-shrink-0">
                       {(order as { image?: string }).image ? (
                         <img src={`/api/img?url=${encodeURIComponent((order as { image?: string }).image!)}`} alt={order.item} className="w-full h-full object-cover" onError={(e) => { e.currentTarget.style.display = "none"; }} />
                       ) : order.source.charAt(0)}
                     </div>
                     <div>
                       <div className="flex items-center gap-2">
-                        <span className="text-[10px] font-mono text-white/12">#{order.id.split("-").pop()}</span>
-                        <span className="text-[13px] text-white/70">{order.item}</span>
+                        <span className="text-[10px] font-mono text-white/60">#{order.id.split("-").pop()}</span>
+                        <span className="text-[13px] font-medium text-white">{order.item}</span>
                       </div>
-                      <span className="text-[11px] font-mono text-white/15">{order.date}</span>
+                      <span className="text-[11px] font-mono text-white/60">{order.date}</span>
                     </div>
                   </div>
                   <div className="flex items-center gap-3">
-                    <span className="text-[12px] font-mono text-white/25">${order.price.toFixed(2)}</span>
-                    <span className="flex items-center gap-1 text-[10px] font-mono text-neon-green/50 bg-neon-green/5 px-2 py-1 rounded-lg">
+                    <span className="text-[13px] font-mono text-white/70">${order.price.toFixed(2)}</span>
+                    <span className="flex items-center gap-1 text-[10px] font-mono text-neon-green/90 bg-neon-green/10 px-2 py-1 rounded-lg">
                       <CheckCircle2 className="w-2.5 h-2.5" /> Delivered
                     </span>
                   </div>

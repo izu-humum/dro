@@ -64,7 +64,7 @@ export default function CookieBanner() {
               </div>
               <button
                 onClick={decline}
-                className="text-white/25 hover:text-white/50 transition-colors duration-300 flex-shrink-0"
+                className="text-white/40 hover:text-white/50 transition-colors duration-300 flex-shrink-0"
               >
                 <X className="w-4 h-4" />
               </button>

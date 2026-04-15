@@ -174,7 +174,7 @@ function ResultsContent() {
                   <>
                     Found <span className="accent-value">{products.length}</span> results
                     from <span className="accent-value">{searchMeta?.sources ?? 0}</span> sources
-                    <span className="ml-2 text-white/20">
+                    <span className="ml-2 text-white/50">
                       · {searchMeta?.timeMs ?? 0}ms
                       <span className="inline-flex items-center gap-1 ml-2 text-accent/60">
                         <Bot className="w-3 h-3" /> live
@@ -259,7 +259,7 @@ function ResultsContent() {
             className="mb-8"
           >
             <div className="glass rounded-2xl p-5 border border-accent/10">
-              <p className="text-[12px] font-mono text-white/30 mb-3">Did you mean:</p>
+              <p className="text-[12px] font-mono text-white/45 mb-3">Did you mean:</p>
               <div className="flex flex-wrap gap-2">
                 {suggestions.map((s) => (
                   <button
@@ -363,7 +363,7 @@ function ResultsContent() {
                 className="text-center py-16"
               >
                 <div className="glass rounded-2xl p-10 max-w-lg mx-auto">
-                  <Search className="w-10 h-10 text-white/10 mx-auto mb-4" />
+                  <Search className="w-10 h-10 text-white/45 mx-auto mb-4" />
                   <h3 className="text-[16px] font-sans font-medium text-white/70 mb-2">
                     Can&apos;t find &quot;{query}&quot;
                   </h3>
@@ -378,18 +378,18 @@ function ResultsContent() {
                     ].map(({ bad, good, label }) => (
                       <div key={bad} className="flex items-center justify-center gap-3 text-[12px] font-mono">
                         <span className="text-red-400/50 line-through">{bad}</span>
-                        <span className="text-white/20">→</span>
+                        <span className="text-white/50">→</span>
                         <button
                           onClick={() => router.push(`/results?q=${encodeURIComponent(good.replace(/"/g, ""))}`)}
                           className="text-accent/70 hover:text-accent transition-colors cursor-pointer"
                         >
                           {good}
                         </button>
-                        <span className="text-white/20">{label}</span>
+                        <span className="text-white/50">{label}</span>
                       </div>
                     ))}
                   </div>
-                  <p className="text-[11px] font-mono text-white/20">
+                  <p className="text-[11px] font-mono text-white/50">
                     Works best with: laptops, phones, bags, shoes, watches, perfume, furniture, skincare, tablets, sunglasses
                   </p>
                 </div>
@@ -410,7 +410,7 @@ function ResultsContent() {
           <div>
             <div className="glass-strong rounded-2xl flex items-center p-2">
               <div className="pl-3 pr-2">
-                <Search className="w-4 h-4 text-white/20" />
+                <Search className="w-4 h-4 text-white/50" />
               </div>
               <input
                 type="text"
@@ -426,7 +426,7 @@ function ResultsContent() {
                   }
                 }}
                 placeholder="New search..."
-                className="flex-1 bg-transparent py-3 text-[13px] text-white placeholder:text-white/20 focus:outline-none font-mono"
+                className="flex-1 bg-transparent py-3 text-[13px] text-white placeholder:text-white/35 focus:outline-none font-mono"
               />
               <button
                 onClick={() => {
@@ -473,7 +473,7 @@ function TierSection({ title, icon, tierClass, products, router, delay, warning 
           <span>TIER — {title}</span>
           {warning && <span className="text-warning/50 ml-1">Verify seller</span>}
         </div>
-        <span className="text-[11px] font-mono text-white/25">{products.length} results</span>
+        <span className="text-[11px] font-mono text-white/40">{products.length} results</span>
       </div>
       <div className="space-y-3">
         <AnimatePresence>
@@ -502,7 +502,7 @@ function TierSection({ title, icon, tierClass, products, router, delay, warning 
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           onClick={() => setVisibleCount(INITIAL_COUNT)}
-          className="w-full mt-4 py-3 rounded-xl border border-white/8 text-[12px] font-mono text-white/25 hover:text-white/40 hover:border-white/15 transition-all duration-300"
+          className="w-full mt-4 py-3 rounded-xl border border-white/8 text-[12px] font-mono text-white/40 hover:text-white/40 hover:border-white/15 transition-all duration-300"
         >
           Show less
         </motion.button>
@@ -549,9 +549,9 @@ function ProductCard({ product, index, onClick }: { product: Product; index: num
                 <p className="text-[12px] font-mono text-white/50 mb-3">{product.source}</p>
                 <div className="flex items-center gap-4 flex-wrap">
                   <span className="text-xl font-bold font-mono accent-value text-glow">${product.price.toFixed(2)}</span>
-                  {product.originalPrice && <span className="text-[12px] text-white/20 line-through font-mono">${product.originalPrice.toFixed(2)}</span>}
+                  {product.originalPrice && <span className="text-[12px] text-white/50 line-through font-mono">${product.originalPrice.toFixed(2)}</span>}
                   {product.float !== undefined && (
-                    <span className="text-[11px] font-mono text-white/30 flex items-center gap-1">
+                    <span className="text-[11px] font-mono text-white/45 flex items-center gap-1">
                       <Zap className="w-3 h-3 text-accent" />Float: {product.float.toFixed(2)}
                     </span>
                   )}
@@ -559,7 +559,7 @@ function ProductCard({ product, index, onClick }: { product: Product; index: num
                 <div className="flex items-center gap-3 mt-2">
                   <div className="flex items-center gap-0.5">
                     {stars.map((filled, i) => (
-                      <Star key={i} className={`w-3 h-3 ${filled ? "text-warning fill-warning" : "text-white/10"}`} />
+                      <Star key={i} className={`w-3 h-3 ${filled ? "text-warning fill-warning" : "text-white/45"}`} />
                     ))}
                   </div>
                   <span className="text-[11px] text-white/40 font-mono">({product.reviews.toLocaleString()})</span>
@@ -568,7 +568,7 @@ function ProductCard({ product, index, onClick }: { product: Product; index: num
               <div className="flex flex-col items-end gap-3">
                 {product.priceHistory.length > 0 && (
                   <div className="flex items-center gap-2">
-                    <TrendingUp className="w-3 h-3 text-white/20" />
+                    <TrendingUp className="w-3 h-3 text-white/50" />
                     <Sparkline data={product.priceHistory} width={100} height={28} />
                   </div>
                 )}
@@ -618,7 +618,7 @@ export default function ResultsPage() {
   return (
     <Suspense fallback={
       <div className="min-h-screen flex items-center justify-center">
-        <div className="flex items-center gap-3 text-white/30 font-mono text-[13px]">
+        <div className="flex items-center gap-3 text-white/45 font-mono text-[13px]">
           <Loader2 className="w-5 h-5 animate-spin text-accent" />
           Initializing agents...
         </div>

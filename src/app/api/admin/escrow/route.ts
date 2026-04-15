@@ -9,13 +9,13 @@ const EXPLORER = "https://sepolia.celoscan.io";
 const SELECTORS: Record<string, string> = {
   releaseEscrow: "0xb1e6d2a1",
   refundEscrow: "0x7c41ad2c",
-  resolveDispute: "0x", // resolveDispute(bytes32,bool) — computed below
+  resolveDispute: "0x3e35178b",
+  markDelivered: "0x", // will be set below
   getEscrow: "0x5de28ae0",
 };
 
-// resolveDispute(bytes32,bool) selector
-// keccak256("resolveDispute(bytes32,bool)") = 0x3e35178b (precomputed)
-SELECTORS.resolveDispute = "0x3e35178b";
+// keccak256("markDelivered(bytes32)") — precomputed
+SELECTORS.markDelivered = "0xb6914c52";
 
 function encBytes32(v: string): string {
   return (v.startsWith("0x") ? v.slice(2) : v).padEnd(64, "0");
@@ -54,11 +54,14 @@ async function readEscrow(escrowId: string) {
   const words = result.slice(2).match(/.{64}/g) ?? [];
   if (!words || words.length < 8) return null;
 
-  const statusNames = ["Created", "Funded", "Released", "Refunded", "Disputed"];
+  const statusNames = ["Created", "Funded", "Released", "Refunded", "Disputed", "Delivered"];
   const statusNum = Number(BigInt("0x" + words[6]));
   const buyer = "0x" + words[2].slice(24);
 
   if (buyer === "0x0000000000000000000000000000000000000000") return null;
+
+  const deliveredAt = words.length > 8 ? Number(BigInt("0x" + words[8])) : 0;
+  const GRACE_PERIOD = 3 * 24 * 60 * 60; // 3 days in seconds
 
   return {
     escrowId,
@@ -70,7 +73,11 @@ async function readEscrow(escrowId: string) {
     deadlineDate: new Date(Number(BigInt("0x" + words[5])) * 1000).toISOString(),
     status: statusNum,
     statusName: statusNames[statusNum] ?? "Unknown",
-    funded: BigInt("0x" + words[7]) > 0n,
+    funded: BigInt("0x" + words[7]) > BigInt(0),
+    deliveredAt,
+    deliveredAtDate: deliveredAt > 0 ? new Date(deliveredAt * 1000).toISOString() : null,
+    graceEndsAt: deliveredAt > 0 ? deliveredAt + GRACE_PERIOD : null,
+    graceEndsAtDate: deliveredAt > 0 ? new Date((deliveredAt + GRACE_PERIOD) * 1000).toISOString() : null,
   };
 }
 
@@ -98,12 +105,15 @@ export async function POST(request: Request) {
         }
         calldata = SELECTORS.resolveDispute + encBytes32(escrowId) + encBool(releaseToTreasury);
         break;
+      case "deliver":
+        calldata = SELECTORS.markDelivered + encBytes32(escrowId);
+        break;
       case "lookup":
         const escrow = await readEscrow(escrowId);
         if (!escrow) return NextResponse.json({ error: "Escrow not found" }, { status: 404 });
         return NextResponse.json(escrow);
       default:
-        return NextResponse.json({ error: "Invalid action. Use: release, refund, resolve, lookup" }, { status: 400 });
+        return NextResponse.json({ error: "Invalid action. Use: release, refund, resolve, deliver, lookup" }, { status: 400 });
     }
 
     const txHash = await sendTx(calldata);

@@ -187,7 +187,7 @@ export default function Home() {
                 <div className="glass-strong p-2 rounded-2xl">
                   <div className="flex items-center">
                     <div className="pl-4 pr-3">
-                      <Search className="w-5 h-5 text-white/20" />
+                      <Search className="w-5 h-5 text-white/50" />
                     </div>
                     <input
                       ref={inputRef}
@@ -196,7 +196,7 @@ export default function Home() {
                       onChange={(e) => setQuery(e.target.value)}
                       onKeyDown={(e) => e.key === "Enter" && handleSearch()}
                       placeholder={placeholder || "What are you looking for?"}
-                      className="flex-1 bg-transparent py-4 text-[16px] text-white placeholder:text-white/35 focus:outline-none font-mono"
+                      className="flex-1 bg-transparent py-4 text-[16px] text-white placeholder:text-white/45 focus:outline-none font-mono"
                     />
                     <motion.button
                       whileHover={{ scale: 1.05 }}
@@ -469,7 +469,7 @@ export default function Home() {
                 <p className="text-[12px] font-mono text-white/40">
                   &copy; 2026 Dro Protocol. All rights reserved.
                 </p>
-                <p className="text-[11px] font-mono text-white/25">
+                <p className="text-[11px] font-mono text-white/40">
                   Built with AI. Protected by smart contracts.
                 </p>
               </div>
@@ -505,7 +505,7 @@ function ComparisonRow({
       </ScrollReveal>
       <ScrollReveal delay={0.2 + index * 0.05}>
         <div className="py-5 px-3 text-center border-t border-dashed border-border-dashed">
-          <p className="text-[14px] font-mono text-white/35">{row.others}</p>
+          <p className="text-[14px] font-mono text-white/50">{row.others}</p>
         </div>
       </ScrollReveal>
     </>

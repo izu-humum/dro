@@ -196,14 +196,14 @@ export default function TrackingPage() {
       <Navbar />
 
       <main className="relative z-10 pt-28 pb-16 px-6 max-w-xl mx-auto">
-        <motion.button {...fadeUp} onClick={() => router.back()} className="flex items-center gap-2 text-[13px] font-mono text-white/30 hover:text-white transition-colors duration-300 mb-10">
+        <motion.button {...fadeUp} onClick={() => router.back()} className="flex items-center gap-2 text-[13px] font-mono text-white/45 hover:text-white transition-colors duration-300 mb-10">
           <ArrowLeft className="w-4 h-4" /> Back
         </motion.button>
 
         {/* Order tabs */}
         <motion.div {...fadeUp} transition={{ ...fadeUp.transition, delay: 0.05 }} className="flex gap-2 mb-8 overflow-x-auto pb-2">
           {mockOrders.map((order) => (
-            <button key={order.id} onClick={() => setSelectedOrder(order)} className={`flex-shrink-0 px-4 py-2.5 rounded-xl text-[11px] font-mono transition-all duration-300 ${selectedOrder.id === order.id ? "bg-accent/10 border border-accent/25 text-accent" : "glass text-white/30 hover:text-white/50"}`}>
+            <button key={order.id} onClick={() => setSelectedOrder(order)} className={`flex-shrink-0 px-4 py-2.5 rounded-xl text-[11px] font-mono transition-all duration-300 ${selectedOrder.id === order.id ? "bg-accent/10 border border-accent/25 text-accent" : "glass text-white/45 hover:text-white/50"}`}>
               #{order.id.split("-").pop()} · {order.item}
             </button>
           ))}
@@ -212,14 +212,14 @@ export default function TrackingPage() {
         {/* Header */}
         <motion.div {...fadeUp} transition={{ ...fadeUp.transition, delay: 0.1 }} className="glass p-6 rounded-2xl border border-accent/10 mb-6">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-[11px] font-mono text-white/20">ORDER #{selectedOrder.id}</span>
+            <span className="text-[11px] font-mono text-white/50">ORDER #{selectedOrder.id}</span>
             <span className="flex items-center gap-1.5 text-[11px] font-mono">
               <span className={`w-1.5 h-1.5 rounded-full ${statusLabel.dot}`} />
               <span className={statusLabel.color}>{statusLabel.text}</span>
             </span>
           </div>
           <h2 className="text-[18px] font-sans font-medium text-white">{selectedOrder.item}</h2>
-          <p className="text-[12px] font-mono text-white/30 mt-1">{selectedOrder.source} · ${selectedOrder.price.toFixed(2)} · {selectedOrder.date}</p>
+          <p className="text-[12px] font-mono text-white/45 mt-1">{selectedOrder.source} · ${selectedOrder.price.toFixed(2)} · {selectedOrder.date}</p>
         </motion.div>
 
         {/* Action Message */}
@@ -271,7 +271,7 @@ export default function TrackingPage() {
         <motion.div {...fadeUp} transition={{ ...fadeUp.transition, delay: 0.3 }} className="glass p-6 rounded-2xl border border-accent/10 mb-6">
           <div className="flex items-center justify-between mb-4">
             <p className="label-text tracking-[0.1em] flex items-center gap-2"><Shield className="w-3.5 h-3.5 text-accent" />ESCROW STATUS</p>
-            <button onClick={() => handleCopy(selectedOrder.escrowAddress || "")} className="flex items-center gap-1 text-[11px] font-mono text-white/20 hover:text-white/40 transition-colors duration-300">
+            <button onClick={() => handleCopy(selectedOrder.escrowAddress || "")} className="flex items-center gap-1 text-[11px] font-mono text-white/50 hover:text-white/40 transition-colors duration-300">
               {selectedOrder.escrowAddress}
               {copied ? <Check className="w-3 h-3 text-neon-green" /> : <Copy className="w-3 h-3" />}
             </button>
@@ -291,7 +291,7 @@ export default function TrackingPage() {
             <span className="text-[16px] font-bold font-mono accent-value text-glow">
               {isResolved ? "Released" : "Held"}: ${selectedOrder.price.toFixed(2)}
             </span>
-            <div className="flex items-center gap-2 text-[12px] text-white/30 font-mono">
+            <div className="flex items-center gap-2 text-[12px] text-white/45 font-mono">
               <Clock className="w-3.5 h-3.5" />
               {isResolved ? (
                 <span className="text-neon-green">Escrow {orderStatus === "confirmed" ? "released" : "refunded"}</span>
@@ -315,7 +315,7 @@ export default function TrackingPage() {
               <button
                 onClick={() => setShowExtendMenu(!showExtendMenu)}
                 disabled={extendingTimer}
-                className="w-full py-3 rounded-xl border border-dashed border-white/10 text-[12px] font-mono text-white/30 hover:text-white/50 hover:border-white/20 hover:bg-white/[0.02] transition-all duration-300 flex items-center justify-center gap-2"
+                className="w-full py-3 rounded-xl border border-dashed border-white/10 text-[12px] font-mono text-white/45 hover:text-white/50 hover:border-white/20 hover:bg-white/[0.02] transition-all duration-300 flex items-center justify-center gap-2"
               >
                 {extendingTimer ? (
                   <><Loader2 className="w-3.5 h-3.5 animate-spin" /> Extending...</>
@@ -331,7 +331,7 @@ export default function TrackingPage() {
                     exit={{ opacity: 0, y: -5 }}
                     className="absolute bottom-full left-0 right-0 mb-2 glass-strong rounded-xl p-2 z-50"
                   >
-                    <p className="text-[10px] font-mono text-white/25 px-2 py-1 mb-1">Extend the auto-refund deadline if you need more time:</p>
+                    <p className="text-[10px] font-mono text-white/40 px-2 py-1 mb-1">Extend the auto-refund deadline if you need more time:</p>
                     {EXTEND_OPTIONS.map((opt) => (
                       <button
                         key={opt.days}
@@ -339,7 +339,7 @@ export default function TrackingPage() {
                         className="w-full text-left px-3 py-2.5 rounded-lg text-[12px] font-mono text-white/50 hover:text-accent hover:bg-accent/8 transition-all duration-200 flex items-center justify-between"
                       >
                         <span>{opt.label}</span>
-                        <span className="text-[10px] text-white/20">→ {totalDays + opt.days}d total</span>
+                        <span className="text-[10px] text-white/50">→ {totalDays + opt.days}d total</span>
                       </button>
                     ))}
                   </motion.div>
@@ -472,7 +472,7 @@ export default function TrackingPage() {
                       onChange={(e) => setDisputeEvidence(e.target.value)}
                       placeholder="Describe what happened..."
                       rows={3}
-                      className="w-full bg-white/3 border border-white/6 rounded-xl px-4 py-3 text-[13px] font-mono text-white placeholder:text-white/15 focus:outline-none focus:border-accent/30 transition-colors duration-300 resize-none"
+                      className="w-full bg-white/3 border border-white/6 rounded-xl px-4 py-3 text-[13px] font-mono text-white placeholder:text-white/30 focus:outline-none focus:border-accent/30 transition-colors duration-300 resize-none"
                     />
                   </div>
                 </div>
@@ -513,7 +513,7 @@ function TimelineItem({ event, isLast, index }: {
     switch (event.status) {
       case "done": return <CheckCircle2 className="w-4 h-4 text-neon-green/70" />;
       case "active": return <motion.div animate={{ rotate: 360 }} transition={{ duration: 2, repeat: Infinity, ease: "linear" }}><Loader2 className="w-4 h-4 text-accent" /></motion.div>;
-      default: return <Circle className="w-4 h-4 text-white/10" />;
+      default: return <Circle className="w-4 h-4 text-white/45" />;
     }
   };
   return (
@@ -524,15 +524,15 @@ function TimelineItem({ event, isLast, index }: {
       </div>
       <div className={`pb-6 ${isLast ? "pb-0" : ""}`}>
         <div className="flex items-center gap-3">
-          <span className={`text-[13px] font-mono ${event.status === "pending" ? "text-white/20" : "text-white/70"}`}>{event.label}</span>
-          {event.time && <span className="text-[11px] font-mono text-white/20">{event.time}</span>}
+          <span className={`text-[13px] font-mono ${event.status === "pending" ? "text-white/50" : "text-white/70"}`}>{event.label}</span>
+          {event.time && <span className="text-[11px] font-mono text-white/50">{event.time}</span>}
           {event.status === "done" && <span className="text-[10px] font-mono text-neon-green/60 bg-neon-green/8 px-1.5 py-0.5 rounded">DONE</span>}
           {event.status === "active" && <span className="text-[10px] font-mono text-accent bg-accent/10 px-1.5 py-0.5 rounded">ACTIVE</span>}
         </div>
         {event.detail && (
-          <p className="text-[11px] font-mono text-white/15 mt-1 flex items-center gap-1">
+          <p className="text-[11px] font-mono text-white/50 mt-1 flex items-center gap-1">
             {event.detail}
-            {(event.detail.startsWith("Tx:") || event.detail.startsWith("Contract:")) && <ExternalLink className="w-2.5 h-2.5 text-white/10 hover:text-accent transition-colors cursor-pointer" />}
+            {(event.detail.startsWith("Tx:") || event.detail.startsWith("Contract:")) && <ExternalLink className="w-2.5 h-2.5 text-white/45 hover:text-accent transition-colors cursor-pointer" />}
           </p>
         )}
       </div>

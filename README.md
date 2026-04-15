@@ -316,49 +316,73 @@ Purchase Agent: execute_purchase
 ### Escrow State Machine
 
 ```
-                         createEscrow (owner)
-                              │
-                              ▼
-                          ┌────────┐
-                          │Created │
-                          └───┬────┘
-                              │ fundEscrow (buyer)
-                              ▼
-                          ┌────────┐
-              ┌───────────│ Funded │───────────┐
-              │           └───┬────┘           │
-              │               │                │
-   releaseEscrow (owner)      │      disputeEscrow (buyer)
-              │               │                │
-              ▼               │                ▼
-         ┌──────────┐        │          ┌──────────┐
-         │ Released │        │          │ Disputed │
-         └──────────┘        │          └────┬─────┘
-           payout →          │               │
-           treasury          │    ┌──────────┼──────────┐
-           fee → owner       │    │          │          │
-                              │    │  resolveDispute     │
-                              │    │  (owner)            │
-                              │    ▼                     ▼
-                              │  true→Released    false→Refunded
-                              │
-                              │  autoRefund (anyone, after deadline)
-                              │  works from Funded OR Disputed
-                              ▼
-                          ┌──────────┐
-                          │ Refunded │
-                          └──────────┘
-                            full amount
-                            → buyer
+                          createEscrow (owner)
+                               │
+                               ▼
+                           ┌────────┐
+                           │Created │
+                           └───┬────┘
+                               │ fundEscrow (buyer)
+                               ▼
+                           ┌────────┐
+               ┌───────────│ Funded │───────────┐
+               │           └───┬────┘           │
+               │               │                │
+  releaseEscrow │    markDelivered    disputeEscrow
+    (owner)     │      (owner)          (buyer)
+               │               │                │
+               ▼               ▼                ▼
+          ┌──────────┐   ┌───────────┐   ┌──────────┐
+          │ Released │   │ Delivered │   │ Disputed │
+          └──────────┘   └─────┬─────┘   └────┬─────┘
+            payout →          │  │             │
+            treasury          │  │    ┌────────┼────────┐
+            fee → owner       │  │    │        │        │
+                               │  │    │ resolveDispute  │
+                               │  │    │   (owner)       │
+                               │  │    ▼                 ▼
+                               │  │  true→Released false→Refunded
+                               │  │
+               ┌───────────────┘  └──────────────┐
+               │                                  │
+     disputeEscrow (buyer)              autoRelease (anyone)
+     (during grace period)              (after 3-day grace)
+               │                                  │
+               ▼                                  ▼
+          ┌──────────┐                       ┌──────────┐
+          │ Disputed │                       │ Released │
+          └──────────┘                       └──────────┘
+                                               seller gets
+                                               paid safely
+               │
+               │  autoRefund (anyone, after deadline)
+               │  works from Funded, Delivered, OR Disputed
+               ▼
+           ┌──────────┐
+           │ Refunded │
+           └──────────┘
+             full amount
+             → buyer
 ```
 
-**After Funded — three possible outcomes:**
+**Seller Safety Net:** The `Delivered` status + `autoRelease` mechanism protects sellers from buyers who refuse to confirm delivery. Once the platform marks delivery (with proof), a 3-day grace period starts. If the buyer doesn't dispute, **anyone** (including the seller or a bot) can call `autoRelease` and the funds transfer automatically.
+
+**After Funded — four possible outcomes:**
 
 | Action | Who Calls | Trigger | Token Flow | Final Status |
 |--------|-----------|---------|------------|--------------|
 | `releaseEscrow` | Owner (platform) | Delivery confirmed | Payout → treasury, 1% fee → owner | `Released` |
+| `markDelivered` | Owner (platform) | Proof of delivery submitted | Funds stay locked, 3-day grace starts | `Delivered` |
 | `disputeEscrow` | Buyer | Problem reported | Funds frozen in contract | `Disputed` |
 | `autoRefund` | Anyone | Deadline passes (14 days) | Full amount → buyer | `Refunded` |
+
+**After Delivered — three possible outcomes:**
+
+| Action | Who Calls | Trigger | Token Flow | Final Status |
+|--------|-----------|---------|------------|--------------|
+| `autoRelease` | Anyone | 3-day grace period passes without dispute | Payout → treasury, 1% fee → owner | `Released` |
+| `disputeEscrow` | Buyer | Problem found during grace period | Funds frozen for arbiter review | `Disputed` |
+| `releaseEscrow` | Owner (platform) | Arbiter fast-tracks release | Payout → treasury, 1% fee → owner | `Released` |
 
 **After Disputed — two possible outcomes:**
 

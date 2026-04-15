@@ -37,8 +37,20 @@ function RelativeTime({ ts }: { ts: number }) {
   );
 }
 
+function getEntryLink(entry: HistoryEntry): string | null {
+  if (entry.type === "pledge" && entry.campaignId) {
+    return `https://app-dev.oaknetwork.org/backer/projects/${entry.campaignId}`;
+  }
+  if (entry.paymentMethod === "crypto" && entry.txHashes) {
+    const txHash = entry.txHashes.fund || entry.txHashes.escrow || entry.txHashes.approve;
+    if (txHash) return `https://sepolia.celoscan.io/tx/${txHash}`;
+  }
+  return null;
+}
+
 function EntryCard({ entry, index }: { entry: HistoryEntry; index: number }) {
   const isPledge = entry.type === "pledge";
+  const externalLink = getEntryLink(entry);
 
   return (
     <motion.div
@@ -49,103 +61,106 @@ function EntryCard({ entry, index }: { entry: HistoryEntry; index: number }) {
         duration: 0.5,
         ease: [0.16, 1, 0.3, 1],
       }}
-      className="glass rounded-2xl overflow-hidden group hover:bg-glass-hover transition-all duration-500"
+      className="relative group transition-all duration-500 hover:scale-[1.02]"
     >
-      <div className="flex items-stretch">
-        {/* Left accent bar */}
-        <div
-          className={`w-1 flex-shrink-0 ${
-            isPledge
-              ? "bg-gradient-to-b from-neon-green/60 to-neon-green/10"
-              : "bg-gradient-to-b from-accent/60 to-accent/10"
-          }`}
-        />
+      {/* Drawer — slides out from behind the tile on hover */}
+      {externalLink && (
+        <a
+          href={externalLink}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="absolute top-0 right-0 h-full w-12 bg-accent/8 rounded-r-2xl flex items-center justify-center pl-2 text-accent/50 hover:text-white hover:bg-accent/15 translate-x-0 group-hover:translate-x-[calc(100%-16px)] transition-transform duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] z-0"
+        >
+          <ExternalLink className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-200" />
+        </a>
+      )}
 
-        <div className="flex-1 p-4 flex items-center gap-4">
-          {/* Icon */}
+      {/* Main tile — sits on top of the drawer */}
+      <div className="relative z-10 glass rounded-2xl overflow-hidden group-hover:bg-glass-hover transition-all duration-500">
+        <div className="flex items-stretch">
+          {/* Left accent bar */}
           <div
-            className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 ${
+            className={`w-1 flex-shrink-0 ${
               isPledge
-                ? "bg-neon-green/10 border border-neon-green/20"
-                : "bg-accent/10 border border-accent/20"
+                ? "bg-gradient-to-b from-neon-green/60 to-neon-green/10"
+                : "bg-gradient-to-b from-accent/60 to-accent/10"
             }`}
-          >
-            {isPledge ? (
-              <Rocket className="w-4 h-4 text-neon-green" />
-            ) : (
-              <ShoppingBag className="w-4 h-4 text-accent" />
-            )}
-          </div>
+          />
 
-          {/* Image (if available) */}
-          {entry.image && (
-            <div className="w-12 h-12 rounded-lg overflow-hidden flex-shrink-0 bg-surface-2">
-              <img
-                src={entry.image}
-                alt=""
-                className="w-full h-full object-cover"
-                onError={(e) => {
-                  e.currentTarget.style.display = "none";
-                }}
-              />
-            </div>
-          )}
-
-          {/* Details */}
-          <div className="flex-1 min-w-0">
-            <div className="flex items-center gap-2 mb-0.5">
-              <span
-                className={`text-[10px] font-mono font-medium px-1.5 py-0.5 rounded ${
-                  isPledge
-                    ? "bg-neon-green/10 text-neon-green/70"
-                    : "bg-accent/10 text-accent/70"
-                }`}
-              >
-                {isPledge ? "PLEDGE" : "PURCHASE"}
-              </span>
-              <span className="text-[10px] font-mono text-white/20 flex items-center gap-1">
-                <Clock className="w-2.5 h-2.5" />
-                <RelativeTime ts={entry.timestamp} />
-              </span>
-            </div>
-            <h4 className="text-[13px] font-sans font-medium text-white/90 truncate">
-              {entry.title}
-            </h4>
-            <p className="text-[11px] font-mono text-white/35 truncate">
-              {entry.subtitle || entry.source}
-            </p>
-          </div>
-
-          {/* Amount + payment */}
-          <div className="text-right flex-shrink-0">
-            <p className="text-[15px] font-mono font-bold text-white">
-              ${entry.amount.toFixed(2)}
-            </p>
-            <div className="flex items-center gap-1 justify-end mt-0.5">
-              {entry.paymentMethod === "crypto" ? (
-                <Wallet className="w-3 h-3 text-accent/50" />
-              ) : (
-                <CreditCard className="w-3 h-3 text-accent/50" />
-              )}
-              <span className="text-[10px] font-mono text-white/25">
-                {entry.paymentMethod === "crypto"
-                  ? entry.currency
-                  : "Card"}
-              </span>
-            </div>
-          </div>
-
-          {/* Link out for pledges */}
-          {isPledge && entry.campaignId && (
-            <a
-              href={`https://app-dev.oaknetwork.org/backer/projects/${entry.campaignId}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-8 h-8 rounded-lg flex items-center justify-center text-white/15 hover:text-accent/60 hover:bg-white/5 transition-all flex-shrink-0"
+          <div className="flex-1 p-4 flex items-center gap-4">
+            {/* Icon */}
+            <div
+              className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 ${
+                isPledge
+                  ? "bg-neon-green/10 border border-neon-green/20"
+                  : "bg-accent/10 border border-accent/20"
+              }`}
             >
-              <ExternalLink className="w-3.5 h-3.5" />
-            </a>
-          )}
+              {isPledge ? (
+                <Rocket className="w-4 h-4 text-neon-green" />
+              ) : (
+                <ShoppingBag className="w-4 h-4 text-accent" />
+              )}
+            </div>
+
+            {/* Image (if available) */}
+            {entry.image && (
+              <div className="w-12 h-12 rounded-lg overflow-hidden flex-shrink-0 bg-surface-2">
+                <img
+                  src={entry.image}
+                  alt=""
+                  className="w-full h-full object-cover"
+                  onError={(e) => {
+                    e.currentTarget.style.display = "none";
+                  }}
+                />
+              </div>
+            )}
+
+            {/* Details */}
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center gap-2 mb-0.5">
+                <span
+                  className={`text-[10px] font-mono font-medium px-1.5 py-0.5 rounded ${
+                    isPledge
+                      ? "bg-neon-green/10 text-neon-green/70"
+                      : "bg-accent/10 text-accent/70"
+                  }`}
+                >
+                  {isPledge ? "PLEDGE" : "PURCHASE"}
+                </span>
+                <span className="text-[10px] font-mono text-white/50 flex items-center gap-1">
+                  <Clock className="w-2.5 h-2.5" />
+                  <RelativeTime ts={entry.timestamp} />
+                </span>
+              </div>
+              <h4 className="text-[13px] font-sans font-medium text-white/90 truncate">
+                {entry.title}
+              </h4>
+              <p className="text-[11px] font-mono text-white/50 truncate">
+                {entry.subtitle || entry.source}
+              </p>
+            </div>
+
+            {/* Amount + payment */}
+            <div className="text-right flex-shrink-0">
+              <p className="text-[15px] font-mono font-bold text-white">
+                ${entry.amount.toFixed(2)}
+              </p>
+              <div className="flex items-center gap-1 justify-end mt-0.5">
+                {entry.paymentMethod === "crypto" ? (
+                  <Wallet className="w-3 h-3 text-accent/50" />
+                ) : (
+                  <CreditCard className="w-3 h-3 text-accent/50" />
+                )}
+                <span className="text-[10px] font-mono text-white/40">
+                  {entry.paymentMethod === "crypto"
+                    ? entry.currency
+                    : "Card"}
+                </span>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </motion.div>
@@ -183,7 +198,7 @@ function HistoryContent() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           onClick={() => router.back()}
-          className="flex items-center gap-2 text-[13px] font-mono text-white/30 hover:text-white transition-colors duration-300 mb-10"
+          className="flex items-center gap-2 text-[13px] font-mono text-white/45 hover:text-white transition-colors duration-300 mb-10"
         >
           <ArrowLeft className="w-4 h-4" /> Back
         </motion.button>
@@ -214,7 +229,7 @@ function HistoryContent() {
             <p className="text-[20px] font-mono font-bold text-white">
               ${totalSpent.toFixed(2)}
             </p>
-            <p className="text-[10px] font-mono text-white/30 mt-1">
+            <p className="text-[10px] font-mono text-white/45 mt-1">
               Total Spent
             </p>
           </div>
@@ -222,13 +237,13 @@ function HistoryContent() {
             <p className="text-[20px] font-mono font-bold text-neon-green">
               {pledgeCount}
             </p>
-            <p className="text-[10px] font-mono text-white/30 mt-1">Pledges</p>
+            <p className="text-[10px] font-mono text-white/45 mt-1">Pledges</p>
           </div>
           <div className="glass rounded-xl p-4 text-center">
             <p className="text-[20px] font-mono font-bold text-accent">
               {purchaseCount}
             </p>
-            <p className="text-[10px] font-mono text-white/30 mt-1">
+            <p className="text-[10px] font-mono text-white/45 mt-1">
               Purchases
             </p>
           </div>
@@ -241,7 +256,7 @@ function HistoryContent() {
           transition={{ delay: 0.15 }}
           className="flex items-center gap-2 mb-6"
         >
-          <Filter className="w-3.5 h-3.5 text-white/20" />
+          <Filter className="w-3.5 h-3.5 text-white/50" />
           {(
             [
               ["all", "All"],
@@ -255,7 +270,7 @@ function HistoryContent() {
               className={`px-3 py-1.5 rounded-lg text-[11px] font-mono transition-all duration-300 ${
                 filter === val
                   ? "bg-accent/15 text-accent border border-accent/20"
-                  : "text-white/30 hover:text-white/50 hover:bg-white/5 border border-transparent"
+                  : "text-white/45 hover:text-white/50 hover:bg-white/5 border border-transparent"
               }`}
             >
               {label}
@@ -271,17 +286,17 @@ function HistoryContent() {
             className="text-center py-20"
           >
             <div className="glass rounded-2xl p-10 max-w-sm mx-auto">
-              <Clock className="w-10 h-10 text-white/10 mx-auto mb-4" />
+              <Clock className="w-10 h-10 text-white/45 mx-auto mb-4" />
               <h3 className="text-[15px] font-sans font-medium text-white/50 mb-2">
                 No transactions yet
               </h3>
-              <p className="text-[12px] font-mono text-white/25">
+              <p className="text-[12px] font-mono text-white/40">
                 Your pledges and purchases will appear here.
               </p>
             </div>
           </motion.div>
         ) : (
-          <div className="space-y-2">
+          <div className="space-y-2 overflow-visible pr-10">
             <AnimatePresence>
               {filtered.map((entry, i) => (
                 <EntryCard key={entry.id} entry={entry} index={i} />

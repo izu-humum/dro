@@ -100,7 +100,7 @@ export default function WalletModal() {
                     <h2 className="text-[15px] font-sans font-semibold text-white">
                       {connected ? "Wallet" : "Connect Wallet"}
                     </h2>
-                    <p className="text-[11px] font-mono text-white/30">
+                    <p className="text-[11px] font-mono text-white/45">
                       {connected ? chain ?? "Connected" : "Choose your wallet provider"}
                     </p>
                   </div>
@@ -121,7 +121,7 @@ export default function WalletModal() {
                     {/* Address card */}
                     <div className="glass p-4 rounded-2xl">
                       <div className="flex items-center justify-between mb-3">
-                        <span className="text-[11px] font-mono text-white/30 uppercase tracking-wider">
+                        <span className="text-[11px] font-mono text-white/45 uppercase tracking-wider">
                           {provider === "manual" ? "External Wallet" : provider}
                         </span>
                         <span className="text-[10px] font-mono text-neon-green bg-neon-green/10 px-2 py-0.5 rounded-full">
@@ -136,13 +136,13 @@ export default function WalletModal() {
                           <p className="text-[14px] font-mono text-white">
                             {shortAddress}
                           </p>
-                          <p className="text-[11px] font-mono text-white/30">
+                          <p className="text-[11px] font-mono text-white/45">
                             {chain ?? "Celo"}
                           </p>
                         </div>
                         <button
                           onClick={handleCopy}
-                          className="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center text-white/30 hover:text-white/60 transition-colors"
+                          className="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center text-white/45 hover:text-white/60 transition-colors"
                         >
                           {copied ? <Check size={14} className="text-neon-green" /> : <Copy size={14} />}
                         </button>
@@ -152,12 +152,12 @@ export default function WalletModal() {
                     {/* Token Balances */}
                     <div className="glass p-4 rounded-2xl">
                       <div className="flex items-center justify-between mb-3">
-                        <span className="text-[11px] font-mono text-white/30 uppercase tracking-wider">
+                        <span className="text-[11px] font-mono text-white/45 uppercase tracking-wider">
                           Balances
                         </span>
                         <button
                           onClick={refreshBalances}
-                          className="w-6 h-6 rounded-md bg-white/5 flex items-center justify-center text-white/25 hover:text-white/50 transition-colors"
+                          className="w-6 h-6 rounded-md bg-white/5 flex items-center justify-center text-white/40 hover:text-white/50 transition-colors"
                         >
                           <RefreshCw size={10} />
                         </button>
@@ -189,13 +189,13 @@ export default function WalletModal() {
                                   <p className="text-[13px] font-mono font-medium text-white">
                                     {token.symbol}
                                   </p>
-                                  <p className="text-[10px] font-mono text-white/20">
+                                  <p className="text-[10px] font-mono text-white/50">
                                     {info.label}
                                   </p>
                                 </div>
                               </div>
                               <div className="flex items-center gap-2">
-                                <p className={`text-[14px] font-mono font-medium ${isZero ? "text-white/20" : "text-white"}`}>
+                                <p className={`text-[14px] font-mono font-medium ${isZero ? "text-white/50" : "text-white"}`}>
                                   {isZero ? "0.00" : token.balance}
                                 </p>
                                 {isZero && token.symbol !== "CELO" && (
@@ -229,7 +229,7 @@ export default function WalletModal() {
                             <p className="text-[11px] font-mono text-[#35D07F] group-hover:text-[#35D07F]/90">
                               Swap tokens on Mento
                             </p>
-                            <p className="text-[9px] font-mono text-white/20">
+                            <p className="text-[9px] font-mono text-white/50">
                               Get USDC, USDT, or other Celo stables
                             </p>
                           </div>
@@ -274,14 +274,14 @@ export default function WalletModal() {
                           <p className="text-[14px] font-sans text-white group-hover:text-accent transition-colors">
                             {wallet.name}
                           </p>
-                          <p className="text-[11px] font-mono text-white/25">
+                          <p className="text-[11px] font-mono text-white/40">
                             {wallet.desc}
                           </p>
                         </div>
                         {loading ? (
-                          <Loader2 size={16} className="text-white/20 animate-spin" />
+                          <Loader2 size={16} className="text-white/50 animate-spin" />
                         ) : (
-                          <ChevronRight size={16} className="text-white/15 group-hover:text-white/30 transition-colors" />
+                          <ChevronRight size={16} className="text-white/50 group-hover:text-white/45 transition-colors" />
                         )}
                       </button>
                     ))}
@@ -289,7 +289,7 @@ export default function WalletModal() {
                     {/* Divider */}
                     <div className="flex items-center gap-3 py-2">
                       <div className="flex-1 h-px bg-white/5" />
-                      <span className="text-[10px] font-mono text-white/20 uppercase tracking-wider">or</span>
+                      <span className="text-[10px] font-mono text-white/50 uppercase tracking-wider">or</span>
                       <div className="flex-1 h-px bg-white/5" />
                     </div>
 
@@ -302,13 +302,13 @@ export default function WalletModal() {
                             value={manualAddress}
                             onChange={(e) => setManualAddress(e.target.value)}
                             placeholder="0x... paste wallet address"
-                            className="flex-1 bg-white/3 border border-white/8 rounded-xl px-4 py-3 text-[13px] font-mono text-white placeholder:text-white/15 focus:outline-none focus:border-accent/30 transition-colors"
+                            className="flex-1 bg-white/3 border border-white/8 rounded-xl px-4 py-3 text-[13px] font-mono text-white placeholder:text-white/45 focus:outline-none focus:border-accent/30 transition-colors"
                           />
                         </div>
                         <div className="flex gap-2">
                           <button
                             onClick={() => setShowManual(false)}
-                            className="flex-1 py-3 rounded-xl bg-white/5 text-[12px] font-mono text-white/30 hover:text-white/50 transition-colors"
+                            className="flex-1 py-3 rounded-xl bg-white/5 text-[12px] font-mono text-white/45 hover:text-white/50 transition-colors"
                           >
                             Cancel
                           </button>
@@ -330,16 +330,16 @@ export default function WalletModal() {
                         onClick={() => setShowManual(true)}
                         className="w-full flex items-center gap-4 p-4 rounded-2xl border border-dashed border-white/8 hover:border-white/15 transition-all duration-300 group"
                       >
-                        <Unplug className="w-6 h-6 text-white/20 group-hover:text-white/40 transition-colors" />
+                        <Unplug className="w-6 h-6 text-white/50 group-hover:text-white/40 transition-colors" />
                         <div className="flex-1 text-left">
                           <p className="text-[14px] font-sans text-white/50 group-hover:text-white/70 transition-colors">
                             Paste Address
                           </p>
-                          <p className="text-[11px] font-mono text-white/20">
+                          <p className="text-[11px] font-mono text-white/50">
                             Connect any external wallet by address
                           </p>
                         </div>
-                        <ChevronRight size={16} className="text-white/10 group-hover:text-white/20 transition-colors" />
+                        <ChevronRight size={16} className="text-white/45 group-hover:text-white/50 transition-colors" />
                       </button>
                     )}
 
@@ -360,7 +360,7 @@ export default function WalletModal() {
 
               {/* Footer */}
               <div className="px-6 py-4 border-t border-white/5">
-                <p className="text-[10px] font-mono text-white/15 text-center">
+                <p className="text-[10px] font-mono text-white/50 text-center">
                   {connected
                     ? "Your wallet is connected to DRO Protocol"
                     : "By connecting, you agree to the DRO Terms of Service"}

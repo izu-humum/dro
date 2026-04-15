@@ -119,8 +119,8 @@ export default function AgentChat() {
             {/* Messages */}
             <div className="flex-1 overflow-y-auto p-4 space-y-3 min-h-[300px] max-h-[400px]">
               {messages.length === 0 && (
-                <div className="text-center text-white/30 text-sm py-8">
-                  <Bot size={32} className="mx-auto mb-3 text-white/20" />
+                <div className="text-center text-white/45 text-sm py-8">
+                  <Bot size={32} className="mx-auto mb-3 text-white/50" />
                   <p>Ask me anything about products,</p>
                   <p>prices, orders, or tracking.</p>
                   <div className="mt-4 space-y-1">
@@ -211,8 +211,8 @@ export default function AgentChat() {
                 >
                   <div className="px-3 py-2 max-h-[120px] overflow-y-auto">
                     <div className="flex items-center justify-between mb-1">
-                      <span className="text-[10px] text-white/30 uppercase tracking-wider">Agent Events</span>
-                      <ChevronDown size={10} className="text-white/20" />
+                      <span className="text-[10px] text-white/45 uppercase tracking-wider">Agent Events</span>
+                      <ChevronDown size={10} className="text-white/50" />
                     </div>
                     <div className="flex flex-wrap gap-1">
                       {events.slice(-10).map((event, i) => (
@@ -233,7 +233,7 @@ export default function AgentChat() {
                   onChange={(e) => setInput(e.target.value)}
                   onKeyDown={(e) => e.key === "Enter" && handleSend()}
                   placeholder="Ask the DRO agent..."
-                  className="flex-1 bg-transparent text-sm text-white placeholder-white/30 outline-none"
+                  className="flex-1 bg-transparent text-sm text-white placeholder-white/45 outline-none"
                 />
                 <button
                   onClick={handleSend}

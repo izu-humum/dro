@@ -19,6 +19,8 @@ import {
   RefreshCw,
   Lock,
   Unlock,
+  PackageCheck,
+  Timer,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import Navbar from "@/components/Navbar";
@@ -34,6 +36,10 @@ interface EscrowData {
   status: number;
   statusName: string;
   funded: boolean;
+  deliveredAt: number;
+  deliveredAtDate: string | null;
+  graceEndsAt: number | null;
+  graceEndsAtDate: string | null;
 }
 
 interface ActionResult {
@@ -51,6 +57,7 @@ const STATUS_CONFIG: Record<number, { label: string; color: string; bg: string }
   2: { label: "RELEASED", color: "text-neon-green", bg: "bg-neon-green" },
   3: { label: "REFUNDED", color: "text-accent", bg: "bg-accent" },
   4: { label: "DISPUTED", color: "text-warning", bg: "bg-warning" },
+  5: { label: "DELIVERED", color: "text-[#a78bfa]", bg: "bg-[#a78bfa]" },
 };
 
 const TOKEN_NAMES: Record<string, string> = {
@@ -156,8 +163,9 @@ export default function AdminPage() {
   const tokenName = escrow ? TOKEN_NAMES[escrow.token.toLowerCase()] ?? "ERC20" : "";
   const statusCfg = escrow ? STATUS_CONFIG[escrow.status] ?? STATUS_CONFIG[0] : STATUS_CONFIG[0];
   const deadlinePassed = escrow ? Date.now() / 1000 > escrow.deadline : false;
-  const canRelease = escrow && (escrow.status === 1 || escrow.status === 4);
-  const canRefund = escrow && (escrow.status === 1 || escrow.status === 4);
+  const canDeliver = escrow && escrow.status === 1;
+  const canRelease = escrow && (escrow.status === 1 || escrow.status === 4 || escrow.status === 5);
+  const canRefund = escrow && (escrow.status === 1 || escrow.status === 4 || escrow.status === 5);
   const canResolve = escrow && escrow.status === 4;
   const isTerminal = escrow && (escrow.status === 2 || escrow.status === 3);
 
@@ -168,14 +176,14 @@ export default function AdminPage() {
       <Navbar />
 
       <main className="relative z-10 pt-28 pb-16 px-6 max-w-2xl mx-auto">
-        <motion.button {...fadeUp} onClick={() => router.back()} className="flex items-center gap-2 text-[13px] font-mono text-white/30 hover:text-white transition-colors duration-300 mb-10">
+        <motion.button {...fadeUp} onClick={() => router.back()} className="flex items-center gap-2 text-[13px] font-mono text-white/45 hover:text-white transition-colors duration-300 mb-10">
           <ArrowLeft className="w-4 h-4" /> Back
         </motion.button>
 
         {/* Header */}
         <motion.div {...fadeUp} transition={{ ...fadeUp.transition, delay: 0.05 }}>
           <h1 className="text-[28px] font-sans font-medium text-white mb-2">Escrow Admin</h1>
-          <p className="text-[13px] font-mono text-white/30 mb-10">Platform owner panel — release, refund, and resolve disputes on-chain</p>
+          <p className="text-[13px] font-mono text-white/45 mb-10">Platform owner panel — release, refund, and resolve disputes on-chain</p>
         </motion.div>
 
         {/* Lookup */}
@@ -186,35 +194,35 @@ export default function AdminPage() {
 
           <div className="space-y-3">
             <div>
-              <label className="text-[11px] font-mono text-white/20 mb-1.5 block">Escrow ID (bytes32)</label>
+              <label className="text-[11px] font-mono text-white/50 mb-1.5 block">Escrow ID (bytes32)</label>
               <input
                 type="text"
                 value={escrowIdInput}
                 onFocus={() => { setOrderIdInput(""); setResult(null); }}
                 onChange={(e) => { setEscrowIdInput(e.target.value); setResult(null); }}
                 placeholder="0x + 64 hex characters"
-                className="w-full bg-white/[0.03] border border-white/[0.06] rounded-xl px-4 py-3 text-[13px] font-mono text-white placeholder-white/15 focus:outline-none focus:border-accent/30 transition-colors"
+                className="w-full bg-white/[0.03] border border-white/[0.06] rounded-xl px-4 py-3 text-[13px] font-mono text-white placeholder-white/30 focus:outline-none focus:border-accent/30 transition-colors"
               />
-              <p className="text-[10px] font-mono text-white/10 mt-1.5">keccak256 hash of the order ID — not a contract address</p>
+              <p className="text-[10px] font-mono text-white/45 mt-1.5">keccak256 hash of the order ID — not a contract address</p>
             </div>
 
             <div className="flex items-center gap-3">
               <div className="flex-1 h-px bg-white/5" />
-              <span className="text-[10px] font-mono text-white/15">OR (recommended)</span>
+              <span className="text-[10px] font-mono text-white/50">OR (recommended)</span>
               <div className="flex-1 h-px bg-white/5" />
             </div>
 
             <div>
-              <label className="text-[11px] font-mono text-white/20 mb-1.5 block">Order ID (string → auto-hashed)</label>
+              <label className="text-[11px] font-mono text-white/50 mb-1.5 block">Order ID (string → auto-hashed)</label>
               <input
                 type="text"
                 value={orderIdInput}
                 onFocus={() => { setEscrowIdInput(""); setResult(null); }}
                 onChange={(e) => { setOrderIdInput(e.target.value); setResult(null); }}
                 placeholder="PB-20260407-0042"
-                className="w-full bg-white/[0.03] border border-white/[0.06] rounded-xl px-4 py-3 text-[13px] font-mono text-white placeholder-white/15 focus:outline-none focus:border-accent/30 transition-colors"
+                className="w-full bg-white/[0.03] border border-white/[0.06] rounded-xl px-4 py-3 text-[13px] font-mono text-white placeholder-white/30 focus:outline-none focus:border-accent/30 transition-colors"
               />
-              <p className="text-[10px] font-mono text-white/10 mt-1.5">Enter the order ID as-is — it will be hashed to the escrow ID automatically</p>
+              <p className="text-[10px] font-mono text-white/45 mt-1.5">Enter the order ID as-is — it will be hashed to the escrow ID automatically</p>
             </div>
 
             <button
@@ -293,18 +301,34 @@ export default function AdminPage() {
 
                 <div className="grid grid-cols-2 gap-4 mb-6">
                   <div>
-                    <p className="text-[10px] font-mono text-white/20 mb-1">Amount</p>
+                    <p className="text-[10px] font-mono text-white/50 mb-1">Amount</p>
                     <p className="text-[20px] font-sans font-medium text-white">
-                      ${escrow.amount.toFixed(2)} <span className="text-[12px] text-white/30">{tokenName}</span>
+                      ${escrow.amount.toFixed(2)} <span className="text-[12px] text-white/45">{tokenName}</span>
                     </p>
                   </div>
                   <div>
-                    <p className="text-[10px] font-mono text-white/20 mb-1">Deadline</p>
+                    <p className="text-[10px] font-mono text-white/50 mb-1">Deadline</p>
                     <p className={`text-[13px] font-mono ${deadlinePassed ? "text-red-400" : "text-white/60"}`}>
                       {new Date(escrow.deadline * 1000).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
                       {deadlinePassed && <span className="text-[10px] ml-2 text-red-400/60">(PASSED)</span>}
                     </p>
                   </div>
+
+                  {/* Grace Period (shown when delivered) */}
+                  {escrow.deliveredAt > 0 && (
+                  <div>
+                    <p className="text-[10px] font-mono text-white/50 mb-1">Grace Period</p>
+                    <p className={`text-[13px] font-mono ${escrow.graceEndsAt && Date.now() / 1000 > escrow.graceEndsAt ? "text-neon-green" : "text-[#a78bfa]"}`}>
+                      {escrow.graceEndsAtDate
+                        ? new Date(escrow.graceEndsAtDate).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric", hour: "2-digit", minute: "2-digit" })
+                        : "N/A"}
+                      {escrow.graceEndsAt && Date.now() / 1000 > escrow.graceEndsAt
+                        ? <span className="text-[10px] ml-2 text-neon-green/60">(READY FOR AUTO-RELEASE)</span>
+                        : <span className="text-[10px] ml-2 text-[#a78bfa]/60">(BUYER CAN DISPUTE)</span>
+                      }
+                    </p>
+                  </div>
+                  )}
                 </div>
 
                 <div className="space-y-3">
@@ -313,7 +337,7 @@ export default function AdminPage() {
                   <CopyRow label="Token" value={`${escrow.token} (${tokenName})`} copyValue={escrow.token} copied={copied} onCopy={handleCopy} />
                 </div>
 
-                <div className="mt-4 pt-4 border-t border-white/5 flex items-center gap-4 text-[11px] font-mono text-white/20">
+                <div className="mt-4 pt-4 border-t border-white/5 flex items-center gap-4 text-[11px] font-mono text-white/50">
                   <span className="flex items-center gap-1.5">
                     {escrow.funded ? <Lock className="w-3 h-3 text-neon-green/60" /> : <Unlock className="w-3 h-3" />}
                     {escrow.funded ? "Tokens locked" : "Not funded"}
@@ -327,7 +351,7 @@ export default function AdminPage() {
                 {/* Refresh button */}
                 <button
                   onClick={lookupEscrow}
-                  className="mt-4 w-full py-2 rounded-xl text-[11px] font-mono text-white/20 hover:text-white/40 border border-white/5 hover:border-white/10 transition-all duration-300 flex items-center justify-center gap-2"
+                  className="mt-4 w-full py-2 rounded-xl text-[11px] font-mono text-white/50 hover:text-white/40 border border-white/5 hover:border-white/10 transition-all duration-300 flex items-center justify-center gap-2"
                 >
                   <RefreshCw className="w-3 h-3" /> Refresh
                 </button>
@@ -341,10 +365,31 @@ export default function AdminPage() {
                   </p>
 
                   <div className="space-y-3">
+                    {/* Mark Delivered */}
+                    <ActionButton
+                      label="Mark Delivered"
+                      description="Record proof of delivery — starts 3-day grace period for buyer to dispute. Auto-releases if no dispute."
+                      icon={<PackageCheck className="w-4 h-4" />}
+                      variant="accent"
+                      disabled={!canDeliver}
+                      loading={actionLoading === "deliver"}
+                      onClick={() => executeAction("deliver")}
+                    />
+
+                    {/* Grace period info */}
+                    {escrow.status === 5 && (
+                      <div className="p-3 rounded-xl bg-[#a78bfa]/5 border border-[#a78bfa]/15">
+                        <div className="flex items-center gap-2 text-[12px] font-mono text-[#a78bfa]/80">
+                          <Timer className="w-3.5 h-3.5" />
+                          Delivered — buyer has 3 days to dispute before auto-release
+                        </div>
+                      </div>
+                    )}
+
                     {/* Release */}
                     <ActionButton
                       label="Release to Treasury"
-                      description="Confirm delivery — send payout to treasury (minus 1% fee)"
+                      description="Send payout to treasury immediately (minus 1% fee)"
                       icon={<ArrowUpRight className="w-4 h-4" />}
                       variant="green"
                       disabled={!canRelease}
@@ -367,7 +412,7 @@ export default function AdminPage() {
                     {canResolve && (
                       <>
                         <div className="pt-2 pb-1">
-                          <p className="text-[10px] font-mono text-white/15 tracking-[0.1em]">DISPUTE RESOLUTION</p>
+                          <p className="text-[10px] font-mono text-white/50 tracking-[0.1em]">DISPUTE RESOLUTION</p>
                         </div>
 
                         <ActionButton
@@ -392,7 +437,7 @@ export default function AdminPage() {
                   </div>
 
                   {escrow.status === 0 && (
-                    <p className="mt-4 text-[11px] font-mono text-white/15 text-center">
+                    <p className="mt-4 text-[11px] font-mono text-white/50 text-center">
                       Escrow must be funded before any actions can be taken.
                     </p>
                   )}
@@ -428,10 +473,10 @@ function CopyRow({ label, value, copyValue, copied, onCopy }: {
   const cv = copyValue ?? value;
   return (
     <div className="flex items-center justify-between">
-      <span className="text-[10px] font-mono text-white/20">{label}</span>
+      <span className="text-[10px] font-mono text-white/50">{label}</span>
       <button
         onClick={() => onCopy(cv, label)}
-        className="flex items-center gap-1.5 text-[11px] font-mono text-white/30 hover:text-white/50 transition-colors max-w-[65%] truncate"
+        className="flex items-center gap-1.5 text-[11px] font-mono text-white/45 hover:text-white/50 transition-colors max-w-[65%] truncate"
       >
         <span className="truncate">{value}</span>
         {copied === label ? <Check className="w-3 h-3 text-neon-green flex-shrink-0" /> : <Copy className="w-3 h-3 flex-shrink-0" />}
@@ -466,12 +511,12 @@ function ActionButton({ label, description, icon, variant, disabled, loading, on
       disabled={disabled || loading}
       className={`w-full p-4 rounded-xl border transition-all duration-300 text-left flex items-center gap-4 disabled:opacity-20 disabled:cursor-not-allowed ${colors[variant]}`}
     >
-      <div className={`flex-shrink-0 ${loading ? "animate-spin" : ""} ${disabled ? "text-white/15" : textColors[variant]}`}>
+      <div className={`flex-shrink-0 ${loading ? "animate-spin" : ""} ${disabled ? "text-white/50" : textColors[variant]}`}>
         {loading ? <Loader2 className="w-4 h-4" /> : icon}
       </div>
       <div className="flex-1 min-w-0">
-        <p className={`text-[13px] font-mono ${disabled ? "text-white/15" : "text-white/70"}`}>{label}</p>
-        <p className="text-[11px] font-mono text-white/20 mt-0.5">{description}</p>
+        <p className={`text-[13px] font-mono ${disabled ? "text-white/50" : "text-white/70"}`}>{label}</p>
+        <p className="text-[11px] font-mono text-white/50 mt-0.5">{description}</p>
       </div>
     </button>
   );
